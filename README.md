@@ -1,7 +1,14 @@
-# 太极图形课S1-大作业
+# 太极图形课S1-大作业-基于广义相对论的光线步进黑洞模拟
 
 ## 作业来源
-> 请你介绍大作业的灵感来源，可以是自己原创的想法，也可以是复现一篇论文。如果有参考论文、文章或者参考代码，请**务必**给出来源。
+这里采用 Ray Marching 的方式，模拟了无自旋黑洞周围吸积盘（只是一个发光的圆盘，并不真实）看起来的样子。由于黑洞非常大的质量，导致周围的时空发生弯曲，因此不能使用常规的欧式度规来衡量直线，这时候对于无自旋黑洞就需要使用史瓦西度规（对于带有自旋的黑洞，比如星际穿越中的卡冈图雅，则需要用克尔度规，代码的复杂度会上升）。通俗来讲则是：黑洞周围的直线“不直”，光也并不直着走，我们需要根据度规解出测地线方程来判断光走了什么样的路径。
+
+求解测地线方程，以及求克氏符来进行坐标变换是一件繁琐的事情。但史瓦西黑洞具有着球对称性，因此模拟过程可以被简化。光线在具有球对称的度规空间中只会在一个平面内进行步进，于是我们在计算运动时可以将光线进行降维处理，只考虑其所在平面内的变化。在此使用辛欧拉法进行光线位置的更新（似乎使用Runge-Kutta效果会好些，但这里没测试过）。
+
+参考资料：
+_Real-time High-Quality Rendering of Non-Rotating Black Holes_ Eric Bruneton 	arXiv:2010.08735
+_Gravitational Lensing by Spinning Black Holes in Astrophysics, and in the Movie Interstellar_ Oliver James, Eugenie von Tunzelmann, Paul Franklin, Kip S. Thorne  arXiv:1502.03808
+https://rantonels.github.io/starless/
 
 ## 运行方式
 > 展示项目运行方式，让更多的人在自己的机器上运行你的代码查看运行效果。

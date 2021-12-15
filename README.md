@@ -9,7 +9,9 @@
 
 参考资料：
 [1] _Real-time High-Quality Rendering of Non-Rotating Black Holes_ Eric Bruneton 	arXiv:2010.08735
+
 [2] _Gravitational Lensing by Spinning Black Holes in Astrophysics, and in the Movie Interstellar_ Oliver James, Eugenie von Tunzelmann, Paul Franklin, Kip S. Thorne  arXiv:1502.03808
+
 [3] https://rantonels.github.io/starless/
 
 ## 运行方式
@@ -21,19 +23,32 @@
 直接运行main.py即可，如果想要改变摄像机角度以及位置，可在gr_ray_tracing_model.py中的Camera类相应位置进行修改。
 
 ## 效果展示
-
+![blackhole demo1](./data/small_angle.png)
+![blackhole demo2](./data/side.png)
+![blackhole demo3](./data/moving.gif)
 
 ## 整体结构
-> 脉络清晰的结构能完整展示你的设计思想，以及实现方式，方便读者快速代入。Python的代码，可以使用命令：`yapf -i xx.py`来格式化。可以在repo的目录中包含如下内容：
+
 ```
 -LICENSE
 -|data
 -README.MD
--xx.py
+-main.py
+-gr_ray_tracing_model.py
 ```
 
 ## 实现细节：
-> 请给出代码的具体实现流程和细节，让感兴趣的人能够更深入的了解你的代码。
+
+### 整体流程
+1. 高斯矩阵预计算（用来进行高斯模糊，非必要）
+2. 创建摄像机与窗口
+3. 产生射线
+4. 射线进行步进
+5. 碰撞以及边界检测
+6. 高斯模糊并叠加canvas，产生辉光效果
+7. 绘制光追结果至屏幕
+
+
 
 # 示例
 下面给出一个模版供大家参考，在你提交大作业的时候可以删除示例部分。按上面的要求填写自己大作业的内容。

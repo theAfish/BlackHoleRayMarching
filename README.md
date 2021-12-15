@@ -8,6 +8,7 @@
 要注意的是，这里对吸积盘的模拟并不真实，由于真实情况中吸积盘内粒子的运动速度非常快，因此会产生多普勒效应，远离我们的粒子会偏红，靠近我们的粒子会偏蓝。与此同时距离黑洞近的粒子会产生引力红移（这是因为靠近黑洞的物体时间相对于远离黑洞的我们走的更慢，因此发出光的频率比通常显得更低）。在这里并没有考虑光谱上的变化。
 
 参考资料：
+
 [1] _Real-time High-Quality Rendering of Non-Rotating Black Holes_ Eric Bruneton 	arXiv:2010.08735
 
 [2] _Gravitational Lensing by Spinning Black Holes in Astrophysics, and in the Movie Interstellar_ Oliver James, Eugenie von Tunzelmann, Paul Franklin, Kip S. Thorne  arXiv:1502.03808
@@ -56,6 +57,14 @@
  
  ![image](https://user-images.githubusercontent.com/85424334/146205218-d2702376-482f-4014-a46d-0bbf4a965a8f.png)
 
-其中中间的单位矩阵可以被看做是一个度规（虽然这样说不太严谨，度规不等同于一个寻常的矩阵，而是一个(0, 2)型张量，在本例中理解起来相似）
+其中中间的单位矩阵可以被看做是一个度规，也就是欧式度规（虽然这样说不太严谨，度规不等同于一个寻常的矩阵，而是一个(0, 2)型张量，但在这里为了理解方便就用矩阵表示了）。欧式度规具有非常多好的性质，因此也很boring，平直时空，直线就是直线。在我们的生活中空间基本可以看成平直的，而且时间坐标也可作为一个参量的形式独立于空间坐标。简言之度规就类似于一把测量长度的尺子。
+
+在相对论中，时间不再是一个独立参量，而是作为一个正经的坐标被引入了度规。平直四维时空的线元可表示为![image](https://user-images.githubusercontent.com/85424334/146213563-273fe5e2-697a-4d21-866d-57cc7188597a.png)
+，度规称作洛伦兹度规：
+
+![image](https://user-images.githubusercontent.com/85424334/146213075-a80a2631-fa95-41b1-ab07-a400a027e007.png)
+
+可以注意到，对于洛伦兹度规，时间坐标前有一个符号，这一点导致了许多奇特的现象，例如洛伦兹变换。并且还除去了光速的平方，这个就解释了为何。
+
 
 

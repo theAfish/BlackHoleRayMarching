@@ -5,24 +5,23 @@
 
 求解测地线方程，以及求克氏符来进行坐标变换是一件繁琐的事情。但史瓦西黑洞具有着球对称性，因此模拟过程可以被简化。光线在具有球对称的度规空间中只会在一个平面内进行步进，于是我们在计算运动时可以将光线进行降维处理，只考虑其所在平面内的变化。在此使用辛欧拉法进行光线位置的更新（似乎使用Runge-Kutta效果会好些，但这里没测试过）。
 
+要注意的是，这里对吸积盘的模拟并不真实，由于真实情况中吸积盘内粒子的运动速度非常快，因此会产生多普勒效应，远离我们的粒子会偏红，靠近我们的粒子会偏蓝。与此同时距离黑洞近的粒子会产生引力红移（这是因为靠近黑洞的物体时间相对于远离黑洞的我们走的更慢，因此发出光的频率比通常显得更低）。在这里并没有考虑光谱上的变化。
+
 参考资料：
-_Real-time High-Quality Rendering of Non-Rotating Black Holes_ Eric Bruneton 	arXiv:2010.08735
-_Gravitational Lensing by Spinning Black Holes in Astrophysics, and in the Movie Interstellar_ Oliver James, Eugenie von Tunzelmann, Paul Franklin, Kip S. Thorne  arXiv:1502.03808
-https://rantonels.github.io/starless/
+[1] _Real-time High-Quality Rendering of Non-Rotating Black Holes_ Eric Bruneton 	arXiv:2010.08735
+[2] _Gravitational Lensing by Spinning Black Holes in Astrophysics, and in the Movie Interstellar_ Oliver James, Eugenie von Tunzelmann, Paul Franklin, Kip S. Thorne  arXiv:1502.03808
+[3] https://rantonels.github.io/starless/
 
 ## 运行方式
-> 展示项目运行方式，让更多的人在自己的机器上运行你的代码查看运行效果。
-> 为了复现运行效果，请给出你的运行环境。
-> 如果项目有依赖，请给出项目的依赖。
 
 #### 运行环境：
-> 请列出`Taichi`程序运行环境，可以在命令行中输入命令：`$ ti`，然后复制输出的第一行。
+[Taichi] version 0.8.1, llvm 10.0.0, commit cc2dd342, win, python 3.9.5
 
 #### 运行：
-> 请列出哪些代码可以运行以及如何运行，如果有命令行参数可以列出参数以及参数对应的含义。
+直接运行main.py即可，如果想要改变摄像机角度以及位置，可在gr_ray_tracing_model.py中的Camera类相应位置进行修改。
 
 ## 效果展示
-> 这里可以展示这份作业运行起来后的可视化效果，可以让其他人更直观感受到你的工作。可以是**图片**（比如渲染效果）、**动图**或**视频**。
+
 
 ## 整体结构
 > 脉络清晰的结构能完整展示你的设计思想，以及实现方式，方便读者快速代入。Python的代码，可以使用命令：`yapf -i xx.py`来格式化。可以在repo的目录中包含如下内容：

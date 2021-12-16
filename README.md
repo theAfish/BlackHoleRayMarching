@@ -87,5 +87,63 @@
 光线坐标平面与吸积盘平面之间的交线即为光线可与吸积盘碰撞的位置，在坐标平面中可简单化作两条相对的射线。
 
 
+### 代码细节
+本作业中代码分为主程序和光追程序两部分。
 
+main.py中包含模拟所使用的参量，以及图像本身的后处理方法。本例中使用高斯矩阵来产生模糊图像，并与原图像叠加产生辉光效果。gauss_mat是一个大小可调控的高斯模糊kernel，这个量用来调控图像的模糊范围，其大小为kernel_size，sigma即为高斯分布中的sigma参量。init_gauss()函数用来在模拟开始时预计算高斯矩阵中的矩阵元。gauss_kernel()函数用于求给定像素在经过gauss模糊后的RGB值。render()与光追教程中的类似，对每一个像素点绘制几条射线，更新射线位置获取色彩并存储在相应像素点上。只是后半部分额外实现了辉光效果。
 
+gr_ray_tracing_model.py中包含两个类 分别为Camera与Ray。其中Camera类与课程中的基本一致，只是增加了相机旋转的代码。而Ray类则添加了步进功能。update_euler()函数用于对光线路径进行求解。
+
+其中局部变量x, y, z代表固定于光线的坐标系的x, y, z基矢：
+
+```
+    @ti.func
+    def update_euler(self):
+        ...
+        x = origin.normalized()
+        y = direction.cross(x).normalized()
+        z = x.cross(y)
+        ...
+```
+而A_no 表示将一个用光线坐标系基矢表示的矢量转换为世界坐标系基矢表示的矢量的矩阵，A_on是他的逆矩阵，作用也刚好反之。在这里需要注意，通过这套操作变换后，位于光线运动平面内的矢量在新坐标系的y分量应当为零，debug的时候可以检查一下这里。phi为光线平面内的极角初始值，dphi即为更新phi的步长。
+```
+    def update_euler(self):
+        ...
+        A_no = ti.Matrix.cols([x, y, z])  # coordinate transformation new -> old
+        A_on = A_no.inverse()  # coordinate transformation old -> new
+        phi = 0.0
+        dphi = 0.001
+        ...
+```
+局部变量dudphi代表极径倒数对极角phi的导数，这里的初始值需要求光线origin与direction之间的夹角来确定，或者用极坐标与直角坐标间导数的转换关系来确定也可以。而accre_l是吸积盘与光线平面交线的切向量。accre_phi1 与accre_phi2分别为该交线在光线平面内所对应的极角，两者相差Pi。u的初始值即为初始极径的倒数。
+```
+    def update_euler(self):
+        ...
+        dudphi = -ti.cos(ti.acos(x.dot(direction))) / (ti.sin(ti.acos(x.dot(direction))) * origin.norm())
+        accre_l = (A_on @ y.cross(ti.Vector([0, 1, 0]))).normalized()
+        accre_phi1 = atan(accre_l[2] / accre_l[0]) % (2 * PI)
+        accre_phi2 = (atan(accre_l[2] / accre_l[0]) + PI) % (2 * PI)
+        u = 1 / origin.norm()
+        ...
+```
+for循环用于进行光线步进，采用辛欧拉法更新dudphi与u。还需要注意为了效率更高，跑远的光线需要直接判定为黑色，这里的截断半径设置为500，超过500则不再进行步进。同样还需要注意光线进入黑洞后也不需要再进行更新，可设置一个与史瓦西半径相近的截断半径（这里可设为1）。最后则是碰撞检测，如果光线步进前后刚好跨过了吸积盘对应的phi角，则添加颜色值。由于光线走的是曲线，因此一束光可能是由多个吸积盘位置叠加产生的，因此这里碰撞后并不跳出循环。
+```
+    def update_euler(self):
+        ...
+        for i in range(10000):
+            phi += dphi
+            phi %= 2 * PI
+            dudphi += - u * (1 - 3 / 2 * u ** 2) * dphi
+            u += dudphi * dphi
+            r = 1/u
+            if r > 500:
+                break
+            if r < 0.01:
+                break
+            if (phi - accre_phi1) * (phi - dphi - accre_phi1) <= 0 or (phi - accre_phi2) * (phi - dphi - accre_phi2) <= 0:
+                # add the mapping to the accretion disk
+                if 2.5 < r < 5:
+                    color += ti.Vector([1/(exp((r-4.9)/0.03)+1), 2/(exp((r-5)/0.3)+1)-1, -(r+3)**3*(r-5)/432])
+        ...
+```
+最后返回颜色值，用于更新canvas

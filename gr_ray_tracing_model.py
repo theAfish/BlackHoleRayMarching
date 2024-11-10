@@ -31,7 +31,7 @@ class Ray:
         for i in range(10000):
             phi += dphi
             phi %= 2 * PI
-            dudphi += - u * (1 - 3 / 2 * u ** 2) * dphi
+            dudphi += - u * (1 - 3 / 2 * u) * dphi
             u += dudphi * dphi
             r = 1/u
             if r > 500:

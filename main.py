@@ -32,14 +32,14 @@ def init_gauss():
 @ti.kernel
 def render():
     for i, j in canvas:
-        u = (i + ti.random()) / image_width
-        v = (j + ti.random()) / image_height
         color = ti.Vector([0.0, 0.0, 0.0])
-        for n in range(samples_per_pixel):
+        for n in range(samples_per_pixel): # 采样四次
+            u = (i + ti.random()) / image_width
+            v = (j + ti.random()) / image_height
             ray = camera.get_ray(u, v)
-            color += ray.update_euler()
-        color /= samples_per_pixel
-        canvas[i, j] += color
+            color += ray.update_euler() # 求和
+        color /= samples_per_pixel # 取平均
+        canvas[i, j] += color #　直接赋值
     for i, j in canvas:
         bloom_img[i, j] = kernel(i, j, canvas) * 0.2
     for i, j in canvas:
